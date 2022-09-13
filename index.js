@@ -90,7 +90,7 @@ function handleRequest(req, res) {
             res.send();
             return;
         }
-        
+
         var output = {};
 
         var csvOutput = [];
@@ -137,7 +137,11 @@ function handleRequest(req, res) {
                 output.responses.push(jsonres);
 
                 let csvres = {};
-                csvres.answer = a.description.en;
+                try {
+                    csvres.answer = a.description.en;
+                } catch (error) {
+                    csvres.answer = a.id;
+                }
                 csvres.count = responseArray[a.id] || 0;
                 csvOutput.push(csvres);
             });
