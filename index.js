@@ -84,7 +84,7 @@ function handleRequest(req, res) {
         }
         var statements = objects.statements;
     
-        if (statements.length < 1 || !statements) {
+        if (!statements || statements.length < 1) {
             res.statusMessage = "No data found for activity " + activity + " with verb " + verb;
             res.status(404).end();
             res.send();
