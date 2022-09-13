@@ -69,8 +69,6 @@ function handleRequest(req, res) {
         res.send();
         return;
     }
-
-    
     var activity = filter.activity;
     var verb = "http://adlnet.gov/expapi/verbs/answered";
     var since = filter.since || null;
@@ -84,8 +82,8 @@ function handleRequest(req, res) {
             res.send();
             return;
         }
-
         var statements = objects.statements;
+    
         if (statements.length < 1 || !statements) {
             res.statusMessage = "No data found for activity " + activity + " with verb " + verb;
             res.status(404).end();
@@ -96,7 +94,14 @@ function handleRequest(req, res) {
         var output = {};
 
         var csvOutput = [];
-
+        // if either one does not exist, return 404
+        if (![0].object || !statements) {
+            res.statusMessage = "No data found for activity " + activity + " with verb " + verb;
+            res.status(404).end();
+            res.send();
+            return;
+        }
+        else {
         output.object = statements ?? [0].object;
 
         output.responses = [];
@@ -104,7 +109,7 @@ function handleRequest(req, res) {
         output.completion = 0;
 
         var responseArray = [];
-
+        
         try {
             statements.map((a) => {
                 result = a.result;
@@ -139,6 +144,7 @@ function handleRequest(req, res) {
         } catch (error) {
             // Do nothing
         }
+    }
         
         // fix cannot set headers after they are sent to the client error
     
